@@ -170,6 +170,7 @@ return [
         Yoeunes\Toastr\ToastrServiceProvider::class,
         Mckenziearts\Notify\LaravelNotifyServiceProvider::class,
         Darryldecode\Cart\CartServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
 
 
         /*

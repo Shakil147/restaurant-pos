@@ -80,4 +80,28 @@ Route::get('/', 'HomeController@index');
 		Route::post('update', 'AccountController@update')->name('update');
 		Route::post('change-password', 'AccountController@change_password')->name('change-password');
 	});
+
+	Route::prefix('/admins')->name('admins.')->group(function(){
+		Route::get('/', 'AdminController@index')->name('index')->middleware('permission:admins-index');
+		Route::get('/get-admins', 'AdminController@getAdmins')->name('get-admins')->middleware('permission:admins-create');
+		Route::get('/create', 'AdminController@create')->name('create')->middleware('permission:admins-index');
+		Route::post('/store', 'AdminController@store')->name('store')->middleware('permission:admins-create');
+		Route::get('show/{id}', 'AdminController@show')->name('show')->middleware('permission:admins-show');
+		Route::get('get-role/{id}', 'AdminController@getRole')->name('get-role')->middleware('permission:admins-show');
+		Route::get('/edit/{id}', 'AdminController@edit')->name('edit')->middleware('permission:admins-update');
+		Route::post('update/{id}', 'AdminController@update')->name('update')->middleware('permission:admins-update');
+		Route::post('destroy/{id}', 'AdminController@destroy')->name('destroy')->middleware('permission:admins-destroy');
+	});
+
+	Route::prefix('/roles')->name('roles.')->group(function(){
+		Route::get('/', 'RoleController@index')->name('index')->middleware('permission:roles-index');
+		Route::get('/get-roles', 'RoleController@getRoles')->name('get-roles')->middleware('permission:roles-index');
+		Route::get('/create', 'RoleController@create')->name('create')->middleware('permission:roles-create');
+		Route::post('/store', 'RoleController@store')->name('store')->middleware('permission:roles-create');
+		Route::get('show/{id}', 'RoleController@show')->name('show')->middleware('permission:roles-show');
+		Route::get('/edit/{id}', 'RoleController@edit')->name('edit')->middleware('permission:roles-update');
+		Route::post('update/{id}', 'RoleController@update')->name('update')->middleware('permission:roles-update');
+		Route::post('destroy/{id}', 'RoleController@destroy')->name('destroy')->middleware('permission:roles-destroy');
+	});
+
 });

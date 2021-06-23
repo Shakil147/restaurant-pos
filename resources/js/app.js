@@ -40,6 +40,14 @@ Vue.component('pos-product-list', require('./components/admin/pos/PosProductList
 Vue.component('orders-list', require('./components/admin/order/OrderList.vue').default);
 Vue.component('orders-view', require('./components/admin/order/OrderView.vue').default);
 Vue.component('products-list', require('./components/admin/product/ProductList.vue').default);
+//role component
+Vue.component('admin-role-list', require('./components/admin/role/RoleList.vue').default);
+
+
+//admin component
+Vue.component('admin-admin-list', require('./components/admin/admin/AdminList.vue').default);
+Vue.component('admin-admin-add', require('./components/admin/admin/AdminAdd.vue').default);
+Vue.component('admin-admin-edit', require('./components/admin/admin/AdminEdit.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

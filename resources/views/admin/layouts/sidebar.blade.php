@@ -43,6 +43,20 @@
         <span class="menu-item-label">Order</span>
       </a><!-- br-menu-link -->
     </li><!-- br-menu-item -->
+    
+    <li class="br-menu-item">
+      <a href="{{ route('admin.admins.index') }}" class="br-menu-link {{ (request()->is('admin/admins*')) ? 'active' : '' }}">
+        <i class="fa fa-gavel" aria-hidden="true"></i>
+        <span class="menu-item-label">Admins</span>
+      </a><!-- br-menu-link -->
+    </li><!-- br-menu-item -->
+    
+    <li class="br-menu-item">
+      <a href="{{ route('admin.roles.index') }}" class="br-menu-link {{ (request()->is('admin/roles*')) ? 'active' : '' }}">
+        <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+        <span class="menu-item-label">Role</span>
+      </a><!-- br-menu-link -->
+    </li><!-- br-menu-item -->
 
     <li class="br-menu-item">
       <a href="{{ route('admin.web.index') }}" class="br-menu-link {{ (request()->is('admin/web*')) ? 'active' : '' }}">
