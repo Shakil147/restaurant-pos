@@ -2296,6 +2296,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2314,43 +2316,28 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    //this.sliders = this.cats;
+    //this.admins = this.cats;
     this.loadAdmins();
   },
   methods: {
-    loadAdmins: function loadAdmins(page) {
+    loadAdmins: function loadAdmins() {
       var _this = this;
 
-      if (typeof page === 'undefined') {
-        var page = 1;
-      }
-
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       axios.get('/admin/admins/get-admins?page=' + page).then(function (response) {
-        console.log(response.data.data);
         _this.laravelData = response.data;
         _this.admins = response.data.data;
         _this.errors = {};
-      })["catch"](function (error) {
-        console.error(error.response.data.errors);
-        console.error(error.response.data.message);
-        _this.errors = error.response.data.errors;
-
-        _this.$swal({
-          title: 'error!',
-          text: error.response.data.message,
-          icon: 'error' //confirmButtonText: 'Cool'
-
-        });
       });
     },
-    deleteCat: function deleteCat(slider, index) {
+    deleteCat: function deleteCat(admin, index) {
       var _this2 = this;
 
-      axios.post('/admin/admins/destroy/' + slider.id).then(function (response) {
+      axios.post('/admin/admins/destroy/' + admin.id).then(function (response) {
         console.log(response.data);
 
         if (response.data.status == 'success') {
-          document.getElementById('data' + slider.id).style.display = "none";
+          document.getElementById('data' + admin.id).style.display = "none";
 
           _this2.$swal({
             title: 'Success!',
@@ -2382,11 +2369,11 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
-    deleteData: function deleteData(slider, index) {
+    deleteData: function deleteData(admin, index) {
       var _this3 = this;
 
       this.$swal({
-        title: 'Are you sure you want to delete ' + slider.name + '?',
+        title: 'Are you sure you want to delete ' + admin.name + '?',
         text: "If you delete this, it will be gone forever.",
         icon: 'warning',
         showCancelButton: true,
@@ -2396,10 +2383,19 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (result) {
         if (result.value) {
           if (result.isConfirmed) {
-            _this3.deleteCat(slider, index);
+            _this3.deleteCat(admin, index);
           }
         }
       });
+    },
+    inArray: function inArray(needle, haystack) {
+      var length = haystack.length;
+
+      for (var i = 0; i < length; i++) {
+        if (haystack[i] == needle) return true;
+      }
+
+      return false;
     }
   }
 });
@@ -45908,27 +45904,36 @@ var render = function() {
                   _vm._v(" "),
                   _c("td", { staticClass: "text-center" }, [
                     _c(
-                      "a",
+                      "div",
                       {
-                        staticClass: "ml-2",
-                        attrs: { href: "/admin/admins/edit/" + admin.id }
+                        staticClass: "btn-group",
+                        attrs: { role: "group", "aria-label": "First group" }
                       },
-                      [_vm._v("Edit")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass: "ml-2",
-                        attrs: { href: "javascript:viod()" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.deleteData(admin, index)
-                          }
-                        }
-                      },
-                      [_vm._v("Delete")]
+                      [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "btn btn-secondary btn-sm",
+                            attrs: { href: "/admin/admins/edit/" + admin.id }
+                          },
+                          [_vm._v("Edit")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "btn btn-warning btn-sm",
+                            attrs: { href: "javascript:viod()" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.deleteData(admin, index)
+                              }
+                            }
+                          },
+                          [_vm._v("Delete")]
+                        )
+                      ]
                     )
                   ])
                 ])
@@ -45954,7 +45959,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-6" }, [
-        _c("h6", { staticClass: "br-section-label" }, [_vm._v("Slider List")]),
+        _c("h6", { staticClass: "br-section-label" }, [_vm._v("admin List")]),
         _vm._v(" "),
         _c("p", { staticClass: "br-section-text" })
       ]),

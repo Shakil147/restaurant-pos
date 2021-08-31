@@ -23,7 +23,7 @@
 <!-- br-pagebody -->
 @endsection
 
-@push('title','Sliders List')
+@push('title','Admins List')
 @push('js')
 
 

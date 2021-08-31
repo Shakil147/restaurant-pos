@@ -46,7 +46,7 @@ class AdminController extends Controller
             $admin->name =  $request->name;
             $admin->email =  $request->email;
             $admin->password = Hash::make($request->password);
-            //$admin->status = ($request->status ==true) ?  true :   false ;
+            $admin->status = ($request->status ==true) ?  true :   false ;
             $admin->save();
 
 
@@ -55,14 +55,14 @@ class AdminController extends Controller
                 $admin->assignRole($request->admin_role);
             }
 
-            // if ($request->file('image') !=null) {
-            //     $photoUrl = 'image'.time().'.png';
-            //     $path = public_path().'/uploads/images/admins/';
-            //     $url = '/uploads/images/admins/';
-            //     Image::make(file_get_contents($request->image))->resize(200, 200)->save($path.$photoUrl);
-            //    $admin->image =  $url.$photoUrl;
-            //    $admin->save();
-            // }
+            if ($request->file('image') !=null) {
+                $photoUrl = 'image'.time().'.png';
+                $path = public_path().'/uploads/images/users/';
+                $url = '/uploads/images/users/';
+                Image::make(file_get_contents($request->image))->resize(200, 200)->save($path.$photoUrl);
+               $admin->image =  $url.$photoUrl;
+               $admin->save();
+            }
 
             return response()->json(['message'=>'Successfully Stored','status'=>'success']);
         }catch (\Exception $e) {
@@ -113,20 +113,20 @@ class AdminController extends Controller
             $admin = User::findOrFail($id);
             $admin->name =  $request->name;
             $admin->email =  $request->email;
-            //$admin->status = ($request->status ==true) ?  true :   false ;
+            $admin->status = ($request->status ==true) ?  true :   false ;
             $admin->save();
 
-            // if ($request->file('image') !=null) {
-            //     if ($admin->image!=null and file_exists(public_path().$admin->image)) {
-            //         unlink(public_path().$admin->image);
-            //     }
-            //      $photoUrl = 'image'.time().'.png';
-            //     $path = public_path().'/uploads/images/admins/';
-            //     $url = '/uploads/images/admins/';
-            //     Image::make(file_get_contents($request->image))->resize(200, 200)->save($path.$photoUrl);
-            //    $admin->image =  $url.$photoUrl;
-            //    $admin->save();
-            // }
+            if ($request->file('image') !=null) {
+                if ($admin->image!=null and file_exists(public_path().$admin->image)) {
+                    unlink(public_path().$admin->image);
+                }
+                 $photoUrl = 'image'.time().'.png';
+                $path = public_path().'/uploads/images/users/';
+                $url = '/uploads/images/users/';
+                Image::make(file_get_contents($request->image))->resize(200, 200)->save($path.$photoUrl);
+               $admin->image =  $url.$photoUrl;
+               $admin->save();
+            }
 
             $role = $admin->getRoleNames();
             $admin->admin_roles = $role;

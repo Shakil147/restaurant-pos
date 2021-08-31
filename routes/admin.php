@@ -19,15 +19,6 @@ Route::get('/', 'HomeController@index');
 		Route::post('update/{id}', 'CategoryController@update')->name('update');
 		Route::post('destroy/{id}', 'CategoryController@destroy')->name('destroy');
 	});
-	Route::prefix('/subcategories')->name('subcategories.')->group(function(){
-		Route::get('/', 'SubCategoryController@index')->name('index');
-		Route::get('/create', 'SubCategoryController@create')->name('create');
-		Route::post('/store', 'SubCategoryController@store')->name('store');
-		Route::get('show/{id}', 'SubCategoryController@show')->name('show');
-		Route::get('/{id}/edit', 'SubCategoryController@edit')->name('edit');
-		Route::post('update/{id}', 'SubCategoryController@update')->name('update');
-		Route::post('destroy/{id}', 'SubCategoryController@destroy')->name('destroy');
-	});
 	Route::prefix('/products')->name('products.')->group(function(){
 		Route::get('/', 'ProductController@index')->name('index');
 		Route::get('/get', 'ProductController@get')->name('get');
