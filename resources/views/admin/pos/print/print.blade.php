@@ -18,27 +18,36 @@ tr,
 table {
     border-top: 1px solid black;
     border-collapse: collapse;
+    /*border: 1px solid black;*/
+}
+td.quantity,
+th.quantity {
+    width: 25px;
+    max-width: 25px;
+    word-break: break-all;
 }
 
 td.description,
 th.description {
-    width: 75px;
-    max-width: 75px;
+    width: 80px;
+    max-width: 80px;
 }
 
-td.quantity,
-th.quantity {
-    width: 40px;
-    max-width: 40px;
-    word-break: break-all;
-}
 
 td.price,
 th.price {
-    width: 40px;
-    max-width: 40px;
+    width: 74px;
+    max-width:74px;
     word-break: break-all;
     text-align: right;
+}
+.summary{
+    text-align: left;
+    width: 100px;
+}
+.summary-price{
+    text-align: right;
+    width: 100px;
 }
 
 .centered {
@@ -66,7 +75,7 @@ img {
     </head>
     <body>
         <div class="ticket">
-           {{--  <img src="./logo.png" alt="Logo"> --}}
+            {{-- <img src="{{ asset('uploads/logo.png') }}" class="logo" alt="Logo"> --}}
             <p class="centered">{{ $web_info->name }}
               <br>{{ $web_info->address }}
               <br>{{ $web_info->phone }}
@@ -75,14 +84,13 @@ img {
             <p class="centered">Date : {{ $order->created_at->format('d-M-y  H:i') }}
               <br>Order Id : {{ $order->order_code }}
               <br>Customer : {{ $order->name }}
-              <br>Sales Associate : {{ $order->user->name }}
+              {{-- <br>Sales Associate : {{ $order->user->name }} --}}
             </p>
             <table>
                 <thead>
                     <tr>
                         <th class="quantity">Q.</th>
                         <th class="description">Name</th>
-                        {{-- <th class="quantity">Discount</th> --}}
                         <th class="price">Tk.</th>
                     </tr>
                 </thead>
@@ -93,40 +101,38 @@ img {
                     <tr>
                         <td class="quantity">{{ $item->quantity }}</td>
                         <td class="description">{{ $item->product_name }}</td>
-                        {{-- <td class="price">{{ $item->discount }}{{ $item->discount_type =='percentage' ?'%' :null }}</td> --}}
                         <td class="price">{{ number_format($item->price * $item->quantity,2) }}</td>
                     </tr>
                     @endforeach
                     @endif
+                </tbody>
+            </table>
+            <table>
+                <tbody>
                     <tr>
-                        <td class="quantity"></td>
-                        <td class="description">Total Item(s):</td>
-                        <td class="price">{{ $order->total_item }}</td>
+                        <td class="summary">Total Item(s):</td>
+                        <td class="summary-price">{{ $order->total_item }}</td>
                     </tr>
                     <tr>
-                        <td class="quantity"></td>
-                        <td class="description">Sub Total</td>
-                        <td class="price">{{ number_format($order->total,2) }}</td>
+                        
+                        <td class="summary">Sub Total</td>
+                        <td class="summary-price">{{ number_format($order->total,2) }}</td>
                     </tr>
-                    {{-- <tr>
-                        <td class="quantity"></td>
-                        <td class="description">Vat (0%)</td>
-                        <td class="price">0</td>
-                    </tr> --}}
                     <tr>
-                        <td class="quantity"></td>
-                        <td class="description">Total Discount </td>
-                        <td class="price">{{ $order->discount }}</td>
+                        <td class="summary">Total Discount </td>
+                        <td class="summary-price">{{ $order->discount }}</td>
                     </tr>
-                    {{-- <tr>
-                        <td class="quantity"></td>
-                        <td class="description">Servise charge</td>
-                        <td class="price">0</td>
-                    </tr> --}}
-                    <tr>
-                        <td class="quantity"></td>
-                        <td class="description">Payable : </td>
-                        <td class="price">{{ number_format($order->grand_total,2) }}</td>
+                    <tr>                        
+                        <td class="summary">Payable :</td>
+                        <td class="summary-price">{{ number_format($order->grand_total,2) }}</td>
+                    </tr>
+                    <tr>                        
+                        <td class="summary">Paid :</td>
+                        <td class="summary-price">{{ number_format($order->collected,2) }}</td>
+                    </tr>
+                    <tr>                        
+                        <td class="summary">Change :</td>
+                        <td class="summary-price">{{ number_format($order->collected - $order->grand_total,2) }}</td>
                     </tr>
                 </tbody>
             </table>

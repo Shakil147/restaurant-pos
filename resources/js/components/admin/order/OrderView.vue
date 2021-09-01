@@ -24,17 +24,16 @@
       <table id="" class="table display responsive nowrap">
           <thead class="thead-dark">
             <tr>
-              <th class="text-center">Item</th>
+              <th class="text-center" colspan="2">Item</th>
               <th class="text-center">Price</th>
               <th class="text-center">Qty</th>
               <th class="text-center">Discount</th>
               <th class="text-center">Sub Total</th>
-              <th class="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(item , index) in items">
-              <td class="text-center">  {{ item.product_name }}
+              <td class="text-center" colspan="2">  {{ item.product_name }}
               </td>
               <td class="text-center">{{ parseFloat(item.price).toFixed(2) }}</td>
               <td class="text-center">
@@ -42,10 +41,10 @@
               </td>
               <td class="text-center">{{ item.discount }}</td>
               <td class="text-center">
-                {{ parseFloat(item.subtotal).toFixed(2) }} 
+                {{ parseFloat(item.price*item.quantity).toFixed(2) }} 
 
               </td>   
-              <td>
+              <!-- <td>
                 <div class="btn-group" role="group" aria-label="First group">
                   <button type="button" class="btn btn-info btn-sm" @click="editModel(item)">
                     Edit
@@ -55,7 +54,7 @@
                   </button>
                 </div>
 
-              </td>             
+              </td>  -->            
             </tr>
           </tbody>
         </table>
@@ -75,8 +74,14 @@
             <td class="text-center text-dark"><b>Charge:0.000</b></td>
           </tr>
           <tr class="table-dark">
-            <td class="text-center  text-dark" colspan="3">
-              <h3><b>Total Payable : {{ data.grand_total }}</b></h3>
+            <td class="text-center  text-dark" >
+              <h4><b>Change : {{ Number(data.collected)  - Number(data.grand_total) }}</b></h4>
+            </td>
+            <td class="text-center  text-dark" >
+              <h4><b>Collected : {{ Number(data.collected) }}</b></h4>
+            </td>
+            <td class="text-center  text-dark" >
+              <h4><b>Grand Total : {{ Number(data.grand_total).toFixed(2) }}</b></h4>
             </td>
           </tr>
         </tbody>

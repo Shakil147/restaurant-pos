@@ -1,5 +1,4 @@
 
-
 <script src="{{ asset('template') }}/lib/jquery/jquery.min.js"></script>
 {{-- <script src="{{ asset('template') }}/lib/jquery-ui/ui/widgets/datepicker.js"></script> --}}
 
@@ -46,6 +45,18 @@
             }
         })
     }
+    @isset($collapsedMenu)
+    $('body').addClass('collapsed-menu');
+
+    // hide toggled sub menu
+    $('.show-sub + .br-menu-sub').slideUp();
+
+    menuText.addClass('op-lg-0-force');
+    $('.br-sideleft').one('transitionend', function(e) {
+      menuText.addClass('d-lg-none');
+    });
+
+    @endisset
 
 </script>
 

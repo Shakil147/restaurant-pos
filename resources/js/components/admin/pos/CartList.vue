@@ -1,9 +1,9 @@
 <template>
   <div class="col-md-6 m-0 p-0">
     <div class="row mt-3 ml-3">
-      <div class="col-sm-7 m-0">
-        <label class="form-control-label">Name: <span class="tx-danger">*</span></label>
-        <input class="form-control" type="text" name="name" value="" placeholder="Enter Name" required v-model="name">  
+      <div class="col-sm-5 m-0">
+        <label class="form-control-label">Name: </label>
+        <input class="form-control" type="text" name="name" value="" placeholder="Name" required v-model="name">
 
         <span class="invalid-feedback" role="alert">
           <strong></strong>
@@ -11,14 +11,30 @@
 
       </div>
 
-      <div class="col-sm-5">
+      <div class="col-sm-3">
+        <label class="form-control-label">Table: </label>
+        <input class="form-control" type="text" name="name" value="" placeholder="Table No" required v-model="table">
+
+        <span class="invalid-feedback" role="alert">
+          <strong></strong>
+        </span>
+      </div>
+      <div class="col-sm-3">
+        <label class="form-control-label">K.O.T: </label>
+        <input class="form-control" type="text" name="kot" value="" placeholder="K.O.T" required v-model="kot">
+
+        <span class="invalid-feedback" role="alert">
+          <strong></strong>
+        </span>
+      </div>
+      <!-- <div class="col-sm-5">
         <button type="button" @click="save('save')" class="btn btn-outline-info btn-sm " style="margin-top: 40px;"><i class="fa fa-floppy" aria-hidden="true"></i> Save</button>
         <button type="button" @click="save('s&p')" class="btn btn-outline-primary btn-sm" style="margin-top: 40px;" ><i class="fa fa-print"></i>Save And Print</button>
-      </div>
+      </div> -->
 
     </div>
 
-    <div class="item-boxes">          
+    <div class="item-boxes">
       <div class="form-group m-3">
         <table id="" class="table display responsive nowrap">
           <thead class="thead-dark">
@@ -41,9 +57,9 @@
               </td>
               <td class="text-center">{{ item.attributes['discount'] }}</td>
               <td class="text-center">
-                {{ parseFloat(item.attributes['subtotal']).toFixed(2) }} 
+                {{ parseFloat(item.attributes['subtotal']).toFixed(2) }}
 
-              </td>   
+              </td>
               <td>
                 <div class="btn-group" role="group" aria-label="First group">
                   <button type="button" class="btn btn-info btn-sm" @click="editModel(item)">
@@ -54,7 +70,7 @@
                   </button>
                 </div>
 
-              </td>             
+              </td>
             </tr>
           </tbody>
         </table>
@@ -70,14 +86,25 @@
             <td class="text-center text-dark"><b>Sub Total: {{ order.total }}</b></td>
             <td class="text-center text-dark"><b>Discount: {{ order.discount }}</b></td>
           </tr>
-          <!-- <tr class="table-warning">
-            <td class="text-center text-dark"><b>Vat & Tax: 0.000</b></td>
-            <td class="text-center text-dark"></td>
-            <td class="text-center text-dark"><b>Charge:0.000</b></td>
-          </tr> -->
           <tr class="table-dark">
-            <td class="text-center  text-dark" colspan="3">
-              <h3><b>Total Payable : {{ order.grand_total }}</b></h3>
+            <td class="text-center  text-dark" >
+              <h4><b>Change : {{ Number(order.change).toFixed(2) }}</b></h4>
+            </td>
+            <td class="text-center  text-dark" >
+              <h4><b>Collected : {{ Number(order.collected).toFixed(2) }}</b></h4>
+            </td>
+            <td class="text-center  text-dark" >
+              <h4><b>Grand Total : {{ Number(order.grand_total).toFixed(2) }}</b></h4>
+            </td>
+          <tr class="table-dark">
+            <td class="text-center  text-dark " >
+              <button class="btn btn-sm btn-primary btn-block" @click.prevent="billingModel()"><i class="far fa-money-bill-alt"></i> Billing</button>
+            </td>
+            <td class="text-center  text-dark" >
+              <button class="btn btn-sm btn-secondary btn-block" @click.prevent="save('s&p')"><i class="fa fa-print"></i> Print</button>
+            </td>
+            <td class="text-center  text-dark" >
+              <button class="btn btn-sm btn-danger btn-block" @click.prevent="clear()"><i class="fas fa-times"></i> Clear</button>
             </td>
           </tr>
         </tbody>
@@ -86,33 +113,45 @@
 
 <div class="modal fade" id="edit-item" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
-  <edit-cart-item :item="edititem"></edit-cart-item>
+  <edit-cart-item v-if="edititem!==null" :item="edititem"></edit-cart-item>
 
 </div>
 
-  </div>
+<div class="modal fade" id="edit-payment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+  <edit-payment :order="order"></edit-payment>
+
+</div>
+
+</div>
 </template>
 
 <script>
+  import EditPayment from './EditPayment.vue';
   import QuantityInput from './QuantityInput.vue';
   import EditCartItem from './EditCartItem.vue';
   export default {
     components:{
       'quantity-input':QuantityInput,
       'edit-cart-item':EditCartItem,
+      'edit-payment':EditPayment,
     },
     data: function () {
       return {
-        name: null,
         edititem: {},
+        name: '',
+        table: '',
+        kot: '',
         items: {},
-        order:{
+        order:{          
           "total_item": 0,
           "total": 0,
           "discount": 0,
-          "grand_total": 0
+          "grand_total": 0,
+          "collected": 0,
+          "change": 0,
+          "note": 0,
         },
-        customer_name: {},
         loading: true,
         file: '',
         message: '',
@@ -126,117 +165,66 @@
     created() {
       this.$eventBus.$on('cart-upated', this.loadCart);
       this.$eventBus.$on('model-close', this.closeModel);
+      this.$eventBus.$on('payment-saved', this.closePaymentModel);
     },
     beforeDestroy() {
       this.$eventBus.$off('cart-upated');
-      this.$eventBus.$off('model-close');      
+      this.$eventBus.$off('model-close');
+      this.$eventBus.$off('payment-saved', this.closePaymentModel);
     },
     methods:{
       loadCart: function(){
-       axios.get('/admin/cart/get')
-       .then((response) => {
-                  //  console.log(response.data)
-                  this.items = response.data;
-                })
-       .catch(error => {
-        console.error(error.response.data.errors)
-        console.error(error.response.data.message)
-        this.errors = error.response.data.errors;
-        this.$swal({
-          title: 'error!',
-          text: error.response.data.message,
-          icon: 'error',
-                  //confirmButtonText: 'Cool'
-                });
-
-      });
-       this.loadOrder();
-    },
-    loadOrder: function(){
        axios.get('/admin/pos/get')
        .then((response) => {
-                  //  console.log(response.data)
-                  this.order = response.data;
-                })
-       .catch(error => {
-        console.error(error.response.data.errors)
-        console.error(error.response.data.message)
-        this.errors = error.response.data.errors;
-        this.$swal({
-          title: 'error!',
-          text: error.response.data.message,
-          icon: 'error',
-       });
-
+        this.items = response.data.items;
+        this.order = response.data;
       });
-    },
-    editModel: function(item){
-       $('#edit-item').modal('show');
-      return this.edititem = item;
-    },
-     updateQuantity: function(item){
-      console.log(item);
-    },
-    closeModel: function(){
-       $('#edit-item').modal('hide');
+       
     },
     removeItem: function(item){
-
-      this.$swal({
-        title: 'Are you sure you want to Remove '+item.name+'?',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, Remove it!',
-        cancelButtonText: 'Cancel!',
-        reverseButtons: true
-      })
-      .then((result) => {
-        if (result.value) {
-          if (result.isConfirmed){
-            let data = new FormData;
+        let data = new FormData;
             data.append('id', item.id);
 
-            axios.post('/admin/cart/destroy',data)
-            .then((response) => {
-              console.log(response.data);
-              this.message = response.data.message;
-              this.status = response.data.status;
+        axios.post('/admin/cart/destroy',data)
+        .then((response) => {
+            console.log(response.data);
+            this.message = response.data.message;
+            this.status = response.data.status;
 
-              if (this.status == 'success') {
-                this.loadCart()
-                this.errors = {};
-              }else{
-                console.log(response.data);
-                this.$swal({
-                  title: 'Error!',
-                  text: this.status,
-                  icon: 'error',
-                });
-              }       
+            if (this.status == 'success') {
+            this.loadCart()
+            this.errors = {};
+            }else{
+            console.log(response.data);
+            this.$swal({
+                title: 'Error!',
+                text: this.status,
+                icon: 'error',
+            });
+            }
 
-            })
-            .catch(error => {
-              if (error.response) {
-                console.log(error.response.data.errors)
-                console.log(error.response.data.message)
-                this.errors = error.response.data.errors;
-                this.$swal({
-                  title: 'error!',
-                  text: error.response.data.message,
-                  icon: 'error',
-
-                });
-              }                    
+        })
+        .catch(error => {
+            if (error.response) {
+            console.log(error.response.data.errors)
+            console.log(error.response.data.message)
+            this.errors = error.response.data.errors;
+            this.$swal({
+                title: 'error!',
+                text: error.response.data.message,
+                icon: 'error',
 
             });
-          }
-        }
+            }
 
-      });
+        });
     },
     save: function(type){
 
       let data = new FormData;
       data.append('name', this.name);
+      data.append('table', this.table);
+      data.append('kot', this.kot);
       data.append('type',type);
 
       axios.post('/admin/pos/store',data)
@@ -244,9 +232,23 @@
         console.log(response.data);
         this.message = response.data.message;
         this.status = response.data.status;
+        this.errors = {};
 
-        if (this.status == 'success') {
-
+          if (this.status == 'success') {
+            this.edititem = {},
+            this.name = '',
+            this.table = '',
+            this.kot = '',
+            this.items = {},
+            this.order = {
+              "total_item": 0,
+              "total": 0,
+              "discount": 0,
+              "grand_total": 0,
+              "collected": 0,
+              "change": 0,
+              "note": 0,
+            };
           if (response.data.print) {
             var url = '/admin/pos/print/'+response.data.print;
             window.open(url,'name','width=20')
@@ -255,9 +257,7 @@
             console.log('no print')
           }
 
-          this.name = null;
-          this.loadCart()
-          this.errors = {};
+          
         }else{
           console.log(response.data);
           this.$swal({
@@ -265,7 +265,7 @@
             text: this.status,
             icon: 'error',
           });
-        }       
+        }
 
       })
       .catch(error => {
@@ -279,10 +279,59 @@
             icon: 'error',
 
           });
-        }                    
+        }
 
       });
-    }
+    },
+    clear: function(){
+       axios.post('/admin/pos/clear')
+      .then((response) => {
+        this.edititem = {},
+        this.name = '',
+        this.table = '',
+        this.kot = '',
+        this.items = {},
+        this.order = {
+          "total_item": 0,
+          "total": 0,
+          "discount": 0,
+          "grand_total": 0,
+          "collected": 0,
+          "change": 0,
+          "note": 0,
+        };
+        if (this.response.status == 200) {
+          this.clearAll();
+          this.$swal({
+            title: 'Success!',
+            text: 'All Cleard',
+            icon: 'success',
+          });
+        }
+      })
+    },
+    billingModel: function(){
+       $('#edit-payment').modal('show');
+    },
+    editModel: function(item){
+       $('#edit-item').modal('show');
+      return this.edititem = item;
+    },
+     updateQuantity: function(item){
+      console.log(item);
+    },
+    closeModel: function(){
+       $('#edit-item').modal('hide');
+    },
+    closePaymentModel: function(){
+       $('#edit-payment').modal('hide');
+    },
   }
 }
 </script>
+
+<style>
+.modal-md .form-group {
+    margin-bottom: 1rem;
+}
+</style>

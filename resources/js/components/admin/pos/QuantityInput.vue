@@ -2,7 +2,7 @@
     <div>
         <span class="qty-control">
             <span class="dn" @click="minus">-</span>
-            <input type="number" v-model="item.quantity" min="0" max="100"/>
+            <input type="number" v-model="quantity" min="1" max="100"/>
             <span class="up" @click="plus">+</span>
         </span>
     </div>
@@ -15,6 +15,7 @@
         },
         data: function () {
             return {
+                quantity: 0,
                 loading: true,
                 file: '',
                 message: '',
@@ -24,26 +25,39 @@
         props: ['item'],
         watch:{
             'item'(){
-              this.discount = this.item.attributes['discount'];
-              this.note = this.item.attributes['note'];
-            }
+                this.quantity = Number(this.item.quantity);
+                this.discount = this.item.attributes['discount'];
+                this.note = this.item.attributes['note'];
+            },
+            'quantity'(){
+                this.item.quantity = Number(this.quantity);
+                //
+            },
+            'item.quantity'(){
+                if(this.item.quantity<1){
+                    alert('minimum quantaty is 1')
+                    this.item.quantity=Number(1);
+                }
+               this.updateCartitem();
+            },
         },
         mounted() {
-          this.discount = this.item.attributes['discount'];
-          this.note = this.item.attributes['note'];
+            this.quantity = Number(this.item.quantity);
+            this.discount = this.item.attributes['discount'];
+            this.note = this.item.attributes['note'];
         },
         methods: {
             minus: function(){
-                if (this.item.quantity>1) {
-                    this.item.quantity = this.item.quantity -1;
-                    this.updateCartitem();
-                    return this.item.quantity;
-                }                
+                if (this.quantity>1) {
+                    this.quantity = Number(this.quantity) -1;
+                    //this.updateCartitem();
+                    return Number(this.quantity);
+                }
             },
             plus: function(){
-                this.item.quantity = this.item.quantity +1;
-                this.updateCartitem();
-                return this.item.quantity;
+                this.quantity = Number(this.quantity) +1;
+                    //this.updateCartitem();
+                    return Number(this.quantity);
             },
             updateCartitem: function(){
                 let data = new FormData;
@@ -70,8 +84,8 @@
                           text: this.status,
                           icon: 'error',
                         });
-                    }       
-                    
+                    }
+
                 })
                 .catch(error => {
                     if (error.response) {
@@ -84,8 +98,8 @@
                           icon: 'error',
                           //confirmButtonText: 'Cool'
                         });
-                    }                    
-                   
+                    }
+
                  });
             },
         }

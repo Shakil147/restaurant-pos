@@ -10,18 +10,18 @@
       <div class="modal-body">
         <form>
           <div class="form-group">
-            <div class="row"> 
+            <div class="row">
               <div class="col-md-4">
                 <label for="recipient-name" class="col-form-label">Quantity:</label>
               </div>
               <div class="col-md-4">
                 <quantity-input :item="item"></quantity-input>
-              </div> 
+              </div>
               <div class="col-md-4">
                 <item-image  :item="item"></item-image>
                 <h4 class="text-dark"><b>{{ item.name }}</b></h4>
                 <h4 class="text-dark"><b>{{  parseFloat(item.price).toFixed(2) }}</b></h4>
-              </div>       
+              </div>
             </div>
           </div>
           <div class="form-group">
@@ -35,10 +35,10 @@
                     <input type="text" class="form-control" v-model="discount"  min="0" max="100"/>
                 </div>
                 <!-- <div class="col-md-4">
-                    <label for="recipient-name" class="col-form-label">  Total :</label> 
+                    <label for="recipient-name" class="col-form-label">  Total :</label>
                     <input type="number" v-model="subtotal" class="form-control" readonly min="0" max="100"/>
                 </div> -->
-              </div>  
+              </div>
           </div>
           <div class="form-group">
             <label for="message-text" class="col-form-label">Note:</label>
@@ -75,16 +75,14 @@
         props: ['item'],
         watch:{
             'item'(){
-              this.discount = this.item.attributes['discount'];   
-              this.subtotal = this.item.attributes['subtotal'];   
-              this.note = this.item.attributes['note'];   
-              this.updateCartitem();
-              //this.getItem();
+              this.discount = this.item.attributes['discount'];
+              this.subtotal = this.item.attributes['subtotal'];
+              this.note = this.item.attributes['note'];
             }
         },
         mounted() {
-          this.discount = this.item.attributes['discount']; 
-          this.subtotal = this.item.attributes['subtotal'];  
+          this.discount = this.item.attributes['discount'];
+          this.subtotal = this.item.attributes['subtotal'];
           this.note = this.item.attributes['note'];
         },
         methods: {
@@ -103,16 +101,16 @@
                           icon: 'error',
                           //confirmButtonText: 'Cool'
                         });
-                    }                    
-                   
+                    }
+
                  });
           },
           itemImage:function(item){
             return this.item.associatedModel.image;
           },
           updateItem: function(){
-            this.updateCartitem();   
-            this.$eventBus.$emit('model-close');         
+            this.updateCartitem();
+            this.$eventBus.$emit('model-close');
           },
 
             updateCartitem: function(){
@@ -130,7 +128,7 @@
                    this.status = response.data.status;
 
                     if (this.status == 'success') {
-                        
+
                         this.$eventBus.$emit('cart-upated');
                         this.errors = {};
                         //this.$toaster.success(this.message);
@@ -141,8 +139,8 @@
                           text: this.status,
                           icon: 'error',
                         });
-                    }       
-                    
+                    }
+
                 })
                 .catch(error => {
                     if (error.response) {
@@ -155,8 +153,8 @@
                           icon: 'error',
                           //confirmButtonText: 'Cool'
                         });
-                    }                    
-                   
+                    }
+
                  });
             },
         }
@@ -165,7 +163,7 @@
 
 
 <style scoped>
-  
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

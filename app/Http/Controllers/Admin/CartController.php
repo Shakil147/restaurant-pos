@@ -8,6 +8,7 @@ use App\Models\Product;
 use Darryldecode\Cart\CartCondition;
 use Cart;
 use Illuminate\Support\Str;
+use Session;
 
 class CartController extends Controller
 {
@@ -75,10 +76,6 @@ class CartController extends Controller
                     'associatedModel' => $product,
                 ));
             }
-             
-            
-            
-
             return response()->json(['message'=>'Item Added','status'=>'success']);
         }catch (\Exception $e) {
             $err_message = \Lang::get($e->getMessage());

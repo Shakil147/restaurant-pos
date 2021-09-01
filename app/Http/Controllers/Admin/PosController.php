@@ -11,6 +11,7 @@ use App\Models\OrderItem;
 use Auth;
 use Str;
 use Cart;
+use Session;
 
 class PosController extends Controller
 {
@@ -26,8 +27,9 @@ class PosController extends Controller
     {
         return view($this->path.'.index',[
             'products'=>Product::latest()->get(),
-            'categories'=>Category::latest()->where('status',1)->get()
-        ]);       
+            'categories'=>Category::latest()->where('status',1)->get(),
+            'collapsedMenu'=>true,
+        ]);
     }
     public function create ()
     {
@@ -56,14 +58,15 @@ class PosController extends Controller
     }
     public function store(Request $request)
     {
-       
-        try {   
+
+        try {
             $items = Cart::getContent();
             if (count($items)>0) {
                 $order = new Order;
                 $order->order_code = $this->order_code();
                 $order->name = $request->name?:'name';
                 $order->table = $request->table;
+                $order->kto = $request->kto;
                 $order->tax = $request->tax;
                 $order->vat = $request->vat;
                 $order->discount = $this->discount();
@@ -72,6 +75,8 @@ class PosController extends Controller
                 $order->total_item = count(Cart::getContent());
                 $order->total = $this->total();
                 $order->grand_total = $this->grand_total();
+                $order->collected =  Session::get('collected') - $this->grand_total();
+                $order->note = Session::get('note');
                 $order->payment_status = 1;
                 $order->status = 1;
                 $order->user_id = Auth::id();
@@ -90,15 +95,17 @@ class PosController extends Controller
                     $order_item->save();
                 }
                 Cart::clear();
+                Session::forget('collected');
+                Session::forget('note');
 
                 if ($request->type =='s&p') {
-                    return response()->json(['message'=>'Saved','status'=>'success','print'=>$order->id]); 
+                    return response()->json(['message'=>'Saved','status'=>'success','print'=>$order->id]);
                 }else{
                     return response()->json(['message'=>'Saved','status'=>'success']);
                 }
             }else{
-                return response()->json(['message'=>'Saved','status'=>'success','print'=> $this->order_id()]); 
-            }  
+                return response()->json(['message'=>'Saved','status'=>'success','print'=> $this->order_id()]);
+            }
 
         }catch (\Exception $e) {
             $err_message = \Lang::get($e->getMessage());
@@ -120,7 +127,7 @@ class PosController extends Controller
                 if ($item->attributes->discount) {
                     $type = $item->attributes->type;
                     $discount = $item->attributes->amount;
-                   
+
                     if ($type=='percentage') {
                         $subTotal = $total - $total * $discount/100;
                     }else{
@@ -163,12 +170,39 @@ class PosController extends Controller
 
     public function get()
     {
+        if (!Session::has('collected')){
+            Session::put('collected',0);
+        }
+        if (!Session::has('note')){
+            Session::put('note','');
+        }
         return response()->json([
             'total_item'=>count(Cart::getContent()),
             'total'=>$this->total(),
             'discount'=>$this->discount(),
             'grand_total'=>$this->grand_total(),
-        ]);
+            'collected'=>Session::get('collected'),
+            'change'=>Session::get('collected') - $this->grand_total(),
+            'grand_total'=>$this->grand_total(),
+            'note'=>Session::get('note'),
+            'items'=>Cart::getContent(),
+        ],200);
+    }
+
+    public function storeBilling(Request $request){
+        //return $request;
+        $this->validate($request, [           
+            'collected' => 'min:1|integer',         
+            'note' => 'nullable|max:300|string',
+        ]);        
+
+        try {
+            Session::put('collected',$request->collected);
+            Session::put('note',$request->note);
+            return $this->get();
+        } catch (Exception $e) {
+            
+        }
     }
 
     public function total()
@@ -180,7 +214,7 @@ class PosController extends Controller
                     $price = $item->price;
                     $quantity = $item->quantity;
                     $total = $price * $quantity;
-                
+
                     $sub_total += $total;
             }
         return $sub_total;
@@ -202,52 +236,7 @@ class PosController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'name'=>'required|min:2|max:190',
-            "categories"    => "nullable|array|min:1",
-            "categories.*"  => "required|string|distinct|min:1",
-            'image' => 'mimes:jpeg,jpg,png,gif|nullable|max:10000', // max 10000kb
-          ]);
 
-        try {
-            $product = Product::findOrFail($id);
-            $product->name = $request->name;
-            $product->description = $request->description;
-            $product->price = $request->price;
-            $product->stock = $request->stock;
-            $product->status = $request->status;
-            $product->save();
-
-            if ($request->file('image')) {
-                if ($product->image!=null and file_exists(public_path().$product->image)) {
-                        unlink(public_path().$product->image);
-                }
-                $photoUrl = 'image'.time().'.png';
-                $path = public_path().'/uploads/images/products';
-                $url = '/uploads/images/products';
-
-                $file = $request->file('image');
-                $file->move($path,$photoUrl);
-                $product->image = $url.'/'.$photoUrl;
-                $product->save();                 
-            }
-            
-            $this->syncCategories($request,$product->id);
-
-            notify()->success('Product Updated successfully');
-             
-            if ($request->submit =='s&c') {
-                    return redirect(route($this->prifix.'.edit',$id));
-            }else{
-                return redirect(route($this->prifix.'.index'));
-            }
-            return redirect(route($this->prifix.'.index'));
-        }catch (\Exception $e) {
-            $err_message = \Lang::get($e->getMessage());
-            notify()->error($err_message);
-            return redirect(route($this->prifix.'.edit',$id));
-        }
-        
     }
 
 
@@ -274,8 +263,23 @@ class PosController extends Controller
             if ($order==null) {
                 $order = Order::latest()->first();
             }
-           
+
             return view('admin.pos.print.print',compact('order'));
+        }catch (\Exception $e) {
+            $err_message = \Lang::get($e->getMessage());
+             return response()->json($err_message);
+            notify()->error($err_message);
+            return redirect(route($this->prifix.'.index'));
+        }
+    }
+    public function clear(Request $request)
+    {
+        try {
+            
+            Cart::clear();
+            Session::forget('collected');
+            Session::forget('note');
+            return response()->json('Successfully Slear',200);
         }catch (\Exception $e) {
             $err_message = \Lang::get($e->getMessage());
              return response()->json($err_message);

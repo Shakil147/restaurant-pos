@@ -45,6 +45,8 @@ Route::get('/', 'HomeController@index');
 		Route::get('/grandtotal', 'PosController@grand_total')->name('grandtotal');
 		Route::get('/discount', 'PosController@discount')->name('discount');
 		Route::get('/total', 'PosController@total')->name('total');
+		Route::post('/store-billing', 'PosController@storeBilling')->name('store-billing');
+		Route::post('/clear', 'PosController@clear')->name('clear');
 	});
 
 	Route::prefix('/cart')->name('cart.')->group(function(){
