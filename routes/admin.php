@@ -62,6 +62,43 @@ Route::get('/', 'HomeController@index');
 		Route::get('/show/{id}', 'OrderController@show')->name('show');
 		Route::get('/getitem/{id}', 'OrderController@getitem')->name('getitem');
 	});
+
+	
+	Route::prefix('/types')->name('types.')->group(function(){
+		Route::get('/', 'TypeController@index')->name('index');
+		Route::get('/get', 'TypeController@get')->name('get');
+		Route::get('/getitem/{id}', 'TypeController@getitem')->name('getitem');
+		Route::get('/create', 'TypeController@create')->name('create');
+		Route::post('/store', 'TypeController@store')->name('store');
+		Route::get('show/{id}', 'TypeController@show')->name('show');
+		Route::get('/edit/{id}', 'TypeController@edit')->name('edit');
+		Route::post('update/{id}', 'TypeController@update')->name('update');
+		Route::post('destroy/{id}', 'TypeController@destroy')->name('destroy');
+	});
+	
+	Route::prefix('/units')->name('units.')->group(function(){
+		Route::get('/', 'UnitsController@index')->name('index');
+		Route::get('/get', 'UnitsController@get')->name('get');
+		Route::get('/getitem/{id}', 'UnitsController@getitem')->name('getitem');
+		Route::get('/create', 'UnitsController@create')->name('create');
+		Route::post('/store', 'UnitsController@store')->name('store');
+		Route::get('show/{id}', 'UnitsController@show')->name('show');
+		Route::get('/edit/{id}', 'UnitsController@edit')->name('edit');
+		Route::post('update/{id}', 'UnitsController@update')->name('update');
+		Route::post('destroy/{id}', 'UnitsController@destroy')->name('destroy');
+	});
+	
+	Route::prefix('/items')->name('items.')->group(function(){
+		Route::get('/', 'ItemController@index')->name('index');
+		Route::get('/get', 'ItemController@get')->name('get');
+		Route::get('/getitem/{id}', 'ItemController@getitem')->name('getitem');
+		Route::get('/create', 'ItemController@create')->name('create');
+		Route::post('/store', 'ItemController@store')->name('store');
+		Route::get('show/{id}', 'ItemController@show')->name('show');
+		Route::get('/edit/{id}', 'ItemController@edit')->name('edit');
+		Route::post('update/{id}', 'ItemController@update')->name('update');
+		Route::post('destroy/{id}', 'ItemController@destroy')->name('destroy');
+	});
 	
 	Route::prefix('/web-infos')->name('web.')->group(function(){
 		Route::get('/', 'WebInfoController@index')->name('index');

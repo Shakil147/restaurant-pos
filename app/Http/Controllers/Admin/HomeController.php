@@ -21,7 +21,8 @@ class HomeController extends Controller
     {
         return view($this->path.'.index',[
             'products'=>Product::latest()->get(),
-            'categories'=>Category::latest()->where('status',1)->get()
+            'categories'=>Category::latest()->where('status',1)->get(),
+            'collapsedMenu'=>true,
         ]);       
     }
 }
