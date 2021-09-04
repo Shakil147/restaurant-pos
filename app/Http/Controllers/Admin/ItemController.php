@@ -26,9 +26,12 @@ class ItemController extends Controller
     }
     public function get(Request $request)
     {
-        $status = $request->status ==1 ? 1 :null;
-       return response()->json(Item::latest()->when($status==1, function ($query) use ($status) {
-            $query->where('status',1);
+        $status = $request->status;
+        $type_id = $request->type_id;
+       return response()->json(Item::latest()->when($request->status, function ($query) use ($status) {
+            $query->where('status',$status);
+        })->when($request->type_id, function ($query) use ($type_id) {
+            $query->where('type_id',$type_id);
         })->get());
     }
     public function create ()
@@ -54,8 +57,9 @@ class ItemController extends Controller
              'selling_price'=>'required|min:1|numeric',
              //'image' => 'mimes:jpeg,jpg,png,gif|nullable|max:10000', // max 10000kb
           ]);
-          
         try {
+
+            $request['status'] = $request->status;
             $item = Item::create($request->except('_token','image'));           
 
             if ($request->file('image')) {
@@ -100,6 +104,8 @@ class ItemController extends Controller
          //  ]);
 
         try {
+
+            $request['status'] = $request->status;
             Item::findOrFail($id)->update($request->except('_token','image'));
             $item = Item::findOrFail($id);
 

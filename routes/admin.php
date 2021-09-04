@@ -100,6 +100,30 @@ Route::get('/', 'HomeController@index');
 		Route::post('destroy/{id}', 'ItemController@destroy')->name('destroy');
 	});
 	
+	Route::prefix('/suppliers')->name('suppliers.')->group(function(){
+		Route::get('/', 'SupplierController@index')->name('index');
+		Route::get('/get', 'SupplierController@get')->name('get');
+		Route::get('/getitem/{id}', 'SupplierController@getitem')->name('getitem');
+		Route::get('/create', 'SupplierController@create')->name('create');
+		Route::post('/store', 'SupplierController@store')->name('store');
+		Route::get('show/{id}', 'SupplierController@show')->name('show');
+		Route::get('/edit/{id}', 'SupplierController@edit')->name('edit');
+		Route::post('update/{id}', 'SupplierController@update')->name('update');
+		Route::post('destroy/{id}', 'SupplierController@destroy')->name('destroy');
+	});
+	
+	Route::prefix('/stocks')->name('stocks.')->group(function(){
+		Route::get('/', 'PurchaseController@index')->name('index');
+		Route::get('/get', 'PurchaseController@get')->name('get');
+		Route::get('/getitem/{id}', 'PurchaseController@getitem')->name('getitem');
+		Route::get('/create', 'PurchaseController@create')->name('create');
+		Route::post('/store', 'PurchaseController@store')->name('store');
+		Route::get('show/{id}', 'PurchaseController@show')->name('show');
+		Route::get('/edit/{id}', 'PurchaseController@edit')->name('edit');
+		Route::post('update/{id}', 'PurchaseController@update')->name('update');
+		Route::post('destroy/{id}', 'PurchaseController@destroy')->name('destroy');
+	});
+	
 	Route::prefix('/web-infos')->name('web.')->group(function(){
 		Route::get('/', 'WebInfoController@index')->name('index');
 		Route::post('update', 'WebInfoController@update')->name('update');

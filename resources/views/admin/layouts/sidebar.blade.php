@@ -27,7 +27,7 @@
     <li class="br-menu-item">
       <a href="{{ route('admin.products.index') }}" class="br-menu-link {{ (request()->is('admin/products*')) ? 'active' : '' }}">
         <i class="fa fa-paint-brush" aria-hidden="true"></i>
-        <span class="menu-item-label">Product</span>
+        <span class="menu-item-label">Products</span>
       </a>
     </li>
     
@@ -37,10 +37,17 @@
         <span class="menu-item-label">Pos</span>
       </a>
     </li>
+    
+    <li class="br-menu-item">
+      <a href="{{ route('admin.stocks.index') }}" class="br-menu-link {{ (request()->is('admin/stocks*')) ? 'active' : '' }}">
+        <i class="fa fa-print" aria-hidden="true"></i>
+        <span class="menu-item-label">Stocks</span>
+      </a>
+    </li>
     <li class="br-menu-item">
       <a href="{{ route('admin.orders.index') }}" class="br-menu-link {{ (request()->is('admin/orders*')) ? 'active' : '' }}">
         <i class="fas fa-box"></i>
-        <span class="menu-item-label">Order</span>
+        <span class="menu-item-label">Orders</span>
       </a>
     </li>
     
@@ -60,6 +67,12 @@
       <a href="{{ route('admin.items.index') }}" class="br-menu-link {{ (request()->is('admin/items*')) ? 'active' : '' }}">
         <i class="fas fa-box"></i>
         <span class="menu-item-label">Items</span>
+      </a>
+    </li>
+    <li class="br-menu-item">
+      <a href="{{ route('admin.suppliers.index') }}" class="br-menu-link {{ (request()->is('admin/suppliers*')) ? 'active' : '' }}">
+        <i class="fas fa-box"></i>
+        <span class="menu-item-label">Suppliers</span>
       </a>
     </li>
     

@@ -57,7 +57,7 @@
 	    },
         watch:{
             'order.collected'(){
-              this.order.change = this.order.collected - this.order.grand_total;
+              this.order.change = Number(this.order.collected - this.order.grand_total).toFixed(2);
               
             }
         },

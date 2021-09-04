@@ -4,15 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Unit;
+use App\Models\Stock;
 use Auth;
 use Str;
 use Image;
 
-class UnitsController extends Controller
+class PurchaseController extends Controller
 {
-    var $path = 'admin.unit';
-    var $prifix = 'admin.units';
+   
+    var $path = 'admin.purchase';
+    var $prifix = 'admin.purchase';
     
     public function __construct()
     {
@@ -20,12 +21,12 @@ class UnitsController extends Controller
     }
     public function index(Request $request)
     {
-        return view($this->path.'.index',['units'=>Unit::latest()->get()]);       
+        return view($this->path.'.index',['stocks'=>Stock::latest()->get()]);       
     }
     public function get(Request $request)
     {
         $status = $request->status ==1 ? 1 :null;
-       return response()->json(Unit::latest()->when($status==1, function ($query) use ($status) {
+       return response()->json(Stock::latest()->when($status==1, function ($query) use ($status) {
             $query->where('status',1);
         })->get());
     }
@@ -35,7 +36,7 @@ class UnitsController extends Controller
     }
     public function edit($id)
     {
-        return view($this->path.'.edit',['unit'=>Unit::findOrFail($id)]);
+        return view($this->path.'.edit',['stock'=>Stock::findOrFail($id)]);
     }
     public function store(Request $request)
     {
@@ -45,7 +46,7 @@ class UnitsController extends Controller
           
         try {
             $request['status'] = $request->status;
-            $unit = Unit::create($request->except('_token'));           
+            $stock = Stock::create($request->except('_token'));           
              notify()->success('Saved Successfully');
              
             if ($request->submit =='s&c') {
@@ -64,7 +65,7 @@ class UnitsController extends Controller
 
     public function show($id)
     {
-        return response()->json(Unit::findOrFail($id));
+        return response()->json(Stock::findOrFail($id));
     }
 
 
@@ -76,8 +77,8 @@ class UnitsController extends Controller
 
         try {
             $request['status'] = $request->status;
-            Unit::findOrFail($id)->update($request->except('_token'));
-            $unit = Unit::findOrFail($id);
+            Stock::findOrFail($id)->update($request->except('_token'));
+            $stock = Stock::findOrFail($id);
 
             notify()->success('Updated Successfully'); 
             
@@ -97,7 +98,7 @@ class UnitsController extends Controller
     public function destroy($id)
     {
         try {
-        $unit = Unit::findOrFail($id)->delete();                
+        $stock = Stock::findOrFail($id)->delete();                
         notify()->success('Removed Successfully');
         return redirect(route($this->prifix.'.index'));
         }catch (\Exception $e) {

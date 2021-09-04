@@ -28,7 +28,7 @@
         <a href="{{ route('admin.units.index') }}" class="btn btn-primary float-right  text-capitalize">unit List</a>
       </dib>
     </div>
-    <form action="{{ route('admin.units.update',$unit->id) }}" method="POST" encunit="multipart/form-data">
+    <form action="{{ route('admin.units.update',$unit->id) }}" method="POST" enctype="multipart/form-data">
       @csrf
     <div class="form-layout form-layout-1">
       <div class="row mg-b-25">

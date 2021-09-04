@@ -37,7 +37,6 @@ class PosController extends Controller
     }
     public function searchProduct ()
     {
-        //$products = Product::get();
         $products = Product::withFilters(
             request()->input('name'),
             request()->input('category_id'),
@@ -64,7 +63,7 @@ class PosController extends Controller
             if (count($items)>0) {
                 $order = new Order;
                 $order->order_code = $this->order_code();
-                $order->name = $request->name?:'name';
+                $order->name = $request->name?:'N/A';
                 $order->table = $request->table;
                 $order->kto = $request->kto;
                 $order->tax = $request->tax;
@@ -75,7 +74,7 @@ class PosController extends Controller
                 $order->total_item = count(Cart::getContent());
                 $order->total = $this->total();
                 $order->grand_total = $this->grand_total();
-                $order->collected =  Session::get('collected') - $this->grand_total();
+                $order->collected =  Session::get('collected');
                 $order->note = Session::get('note');
                 $order->payment_status = 1;
                 $order->status = 1;
@@ -192,7 +191,7 @@ class PosController extends Controller
     public function storeBilling(Request $request){
         //return $request;
         $this->validate($request, [           
-            'collected' => 'min:1|integer',         
+            'collected' => 'min:0|numeric',         
             'note' => 'nullable|max:300|string',
         ]);        
 

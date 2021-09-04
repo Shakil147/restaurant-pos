@@ -123,7 +123,7 @@ img {
                         <td class="summary-price">{{ $order->discount }}</td>
                     </tr>
                     <tr>                        
-                        <td class="summary">Payable :</td>
+                        <td class="summary">Grand Total :</td>
                         <td class="summary-price">{{ number_format($order->grand_total,2) }}</td>
                     </tr>
                     <tr>                        
@@ -131,8 +131,19 @@ img {
                         <td class="summary-price">{{ number_format($order->collected,2) }}</td>
                     </tr>
                     <tr>                        
+                        @php
+                        $change =$order->collected - $order->grand_total;
+                        @endphp
+
+                        @if ($change < 0):
                         <td class="summary">Change :</td>
-                        <td class="summary-price">{{ number_format($order->collected - $order->grand_total,2) }}</td>
+                        <td class="summary-price">{{ number_format(abs($change),2) }}</td>
+                        @else
+
+                        <td class="summary">Due :</td>
+                        <td class="summary-price">{{ number_format(abs($change),2) }}</td>
+
+                        @endif
                     </tr>
                 </tbody>
             </table>

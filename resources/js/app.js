@@ -20,7 +20,7 @@ import Toaster from 'v-toaster'
 import 'v-toaster/dist/v-toaster.css'
 Vue.use(Toaster, {timeout: 5000});
 Vue.use(require('vue-moment'));
-
+//window.location.origin
 Vue.component('pagination', require('laravel-vue-pagination').default);
 /**
  * The following block of code may be used to automatically register your
@@ -40,6 +40,10 @@ Vue.component('pos-product-list', require('./components/admin/pos/PosProductList
 Vue.component('orders-list', require('./components/admin/order/OrderList.vue').default);
 Vue.component('orders-view', require('./components/admin/order/OrderView.vue').default);
 Vue.component('products-list', require('./components/admin/product/ProductList.vue').default);
+
+// Vue.component('stock-view', require('./components/admin/order/OrderView.vue').default);
+// Vue.component('stock-list', require('./components/admin/product/ProductList.vue').default);
+Vue.component('stock-in', require('./components/admin/stock/StockIn.vue').default);
 //role component
 Vue.component('admin-role-list', require('./components/admin/role/RoleList.vue').default);
 

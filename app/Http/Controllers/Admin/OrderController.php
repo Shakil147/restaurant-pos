@@ -23,8 +23,6 @@ class OrderController extends Controller
     
     public function get(Request $request)
     {
-        //return $request;
-
         $perpage = $request->perpage? $request->perpage : 20;
         if ($perpage =='all') {
             $perpage = 999999999;
