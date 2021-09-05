@@ -10,40 +10,14 @@
         <span class="menu-item-label">Dashboard</span>
       </a>
     </li>
-    <li class="br-menu-item">
-      <a href="{{ route('admin.categories.index') }}" class="br-menu-link {{ (request()->is('admin/categories*')) ? 'active' : '' }}">
-        <i class="fa fa-cubes" aria-hidden="true"></i>
-        <span class="menu-item-label">Category</span>
-      </a>
-    </li>
-    
-    {{-- <li class="br-menu-item">
-      <a href="{{ route('admin.subcategories.index') }}" class="br-menu-link {{ (request()->is('admin/subcategories*')) ? 'active' : '' }}">
-        <i class="fa fa-cube" aria-hidden="true"></i>
-        <span class="menu-item-label">Sub Category</span>
-      </a>
-    </li> --}}
-    
-    <li class="br-menu-item">
-      <a href="{{ route('admin.products.index') }}" class="br-menu-link {{ (request()->is('admin/products*')) ? 'active' : '' }}">
-        <i class="fa fa-paint-brush" aria-hidden="true"></i>
-        <span class="menu-item-label">Products</span>
-      </a>
-    </li>
-    
+
     <li class="br-menu-item">
       <a href="{{ route('admin.pos.index') }}" class="br-menu-link {{ (request()->is('admin/pos*')) ? 'active' : '' }}">
         <i class="fa fa-print" aria-hidden="true"></i>
         <span class="menu-item-label">Pos</span>
       </a>
     </li>
-    
-    <li class="br-menu-item">
-      <a href="{{ route('admin.stocks.index') }}" class="br-menu-link {{ (request()->is('admin/stocks*')) ? 'active' : '' }}">
-        <i class="fa fa-print" aria-hidden="true"></i>
-        <span class="menu-item-label">Stocks</span>
-      </a>
-    </li>
+
     <li class="br-menu-item">
       <a href="{{ route('admin.orders.index') }}" class="br-menu-link {{ (request()->is('admin/orders*')) ? 'active' : '' }}">
         <i class="fas fa-box"></i>
@@ -52,27 +26,56 @@
     </li>
     
     <li class="br-menu-item">
-      <a href="{{ route('admin.types.index') }}" class="br-menu-link {{ (request()->is('admin/types*')) ? 'active' : '' }}">
-        <i class="fas fa-box"></i>
-        <span class="menu-item-label">Types</span>
+      <a href="{{ route('admin.stocks.index') }}" class="br-menu-link {{ (request()->is('admin/stocks*')) ? 'active' : '' }}">
+        <i class="fa fa-archive" aria-hidden="true"></i>
+        <span class="menu-item-label">Stocks</span>
       </a>
     </li>
+    
     <li class="br-menu-item">
-      <a href="{{ route('admin.units.index') }}" class="br-menu-link {{ (request()->is('admin/units*')) ? 'active' : '' }}">
-        <i class="fas fa-box"></i>
-        <span class="menu-item-label">Units</span>
-      </a>
+      <a href="#" class="br-menu-link with-sub {{ (request()->is('admin/categories*')) ? 'active show-sub"' : null }}{{ (request()->is('admin/products*')) ? 'active show-sub' : null }}">
+        <i class="menu-item-icon icon ion-ios-color-filter-outline tx-24"></i>
+        <span class="menu-item-label">Product Catalogue</span>
+      </a><!-- br-menu-link -->
+      <ul class="br-menu-sub">
+        <li class="sub-item"><a href="{{ route('admin.categories.index') }}" class="sub-link {{ (request()->is('admin/categories*')) ? 'active' : '' }}">Categories</a></li>
+        <li class="sub-item"><a href="{{ route('admin.products.index') }}" class="sub-link {{ (request()->is('admin/products*')) ? 'active' : '' }}">Products</a></li>
+      </ul>
     </li>
+
     <li class="br-menu-item">
-      <a href="{{ route('admin.items.index') }}" class="br-menu-link {{ (request()->is('admin/items*')) ? 'active' : '' }}">
-        <i class="fas fa-box"></i>
-        <span class="menu-item-label">Items</span>
-      </a>
+      <a href="#" class="br-menu-link with-sub {{ (request()->is('admin/units*')) ? 'active show-sub' : null }}{{ (request()->is('admin/types*')) ? 'active show-sub' : null }}{{ (request()->is('admin/items*')) ? 'active' : null }}">
+        <i class="menu-item-icon icon ion-ios-color-filter-outline tx-24"></i>
+        <span class="menu-item-label">Catalogue</span>
+      </a><!-- br-menu-link -->
+      <ul class="br-menu-sub">
+        <li class="sub-item"><a href="{{ route('admin.units.index') }}" class="sub-link {{ (request()->is('admin/units*')) ? 'active' : '' }}">Units</a></li>
+        <li class="sub-item"><a href="{{ route('admin.types.index') }}" class="sub-link {{ (request()->is('admin/types*')) ? 'active' : '' }}">Items Types</a></li>
+        <li class="sub-item"><a href="{{ route('admin.items.index') }}" class="sub-link {{ (request()->is('admin/items*')) ? 'active' : '' }}">Items</a></li>
+      </ul>
     </li>
+
     <li class="br-menu-item">
       <a href="{{ route('admin.suppliers.index') }}" class="br-menu-link {{ (request()->is('admin/suppliers*')) ? 'active' : '' }}">
-        <i class="fas fa-box"></i>
+        <i class="fa fa-users" aria-hidden="true"></i>
         <span class="menu-item-label">Suppliers</span>
+      </a>
+    </li>
+
+    <li class="br-menu-item">
+      <a href="#" class="br-menu-link with-sub {{ (request()->is('admin/stafftypes*')) ? 'active show-sub' : null }}{{ (request()->is('admin/staff*')) ? 'active show-sub' : null }}">
+        <i class="menu-item-icon icon ion-ios-color-filter-outline tx-24"></i>
+        <span class="menu-item-label">Staff</span>
+      </a><!-- br-menu-link -->
+      <ul class="br-menu-sub">
+        <li class="sub-item"><a href="{{ route('admin.staff-types.index') }}" class="sub-link {{ (request()->is('admin/stafftypes*')) ? 'active' : '' }}">Staff Types</a></li>
+        <li class="sub-item"><a href="{{ route('admin.staff.index') }}" class="sub-link {{ (request()->is('admin/admins*')) ? 'active' : '' }}">Staff Menage</a></li>
+      </ul>
+    </li>
+
+    <li class="br-menu-item">
+      <a href="#" class="br-menu-link ">
+        <span class="menu-item-label">Assets</span>
       </a>
     </li>
     
@@ -96,7 +99,6 @@
         <span class="menu-item-label">Web Info</span>
       </a>
     </li>
-
 
   </ul>
 

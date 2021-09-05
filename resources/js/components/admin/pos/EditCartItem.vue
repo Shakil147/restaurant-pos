@@ -78,6 +78,9 @@
               this.discount = this.item.attributes['discount'];
               this.subtotal = this.item.attributes['subtotal'];
               this.note = this.item.attributes['note'];
+            },
+            'discount'(){
+              console.log('discount '+discount);
             }
         },
         mounted() {
@@ -89,27 +92,15 @@
 
           getItem:function(){
            axios.get('/admin/cart/getitem/'+this.item.id)
-                .then((response) => {this.item = response.data})
-                .catch(error => {
-                    if (error.response) {
-                        console.log(error.response.data.errors)
-                        console.log(error.response.data.message)
-                        this.errors = error.response.data.errors;
-                        this.$swal({
-                          title: 'error!',
-                          text: error.response.data.message,
-                          icon: 'error',
-                          //confirmButtonText: 'Cool'
-                        });
-                    }
-
-                 });
+                .then((response) => {this.item = response.data});
           },
           itemImage:function(item){
             return this.item.associatedModel.image;
           },
           updateItem: function(){
-            this.updateCartitem();
+            if (this.item.id) {
+              this.updateCartitem();
+            }            
             this.$eventBus.$emit('model-close');
           },
 

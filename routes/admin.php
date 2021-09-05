@@ -124,6 +124,29 @@ Route::get('/', 'HomeController@index');
 		Route::post('destroy/{id}', 'PurchaseController@destroy')->name('destroy');
 	});
 	
+	Route::prefix('/stafftypes')->name('staff-types.')->group(function(){
+		Route::get('/', 'StaffTypeController@index')->name('index');
+		Route::get('/get', 'StaffTypeController@get')->name('get');
+		Route::get('/getitem/{id}', 'StaffTypeController@getitem')->name('getitem');
+		Route::get('/create', 'StaffTypeController@create')->name('create');
+		Route::post('/store', 'StaffTypeController@store')->name('store');
+		Route::get('show/{id}', 'StaffTypeController@show')->name('show');
+		Route::get('/edit/{id}', 'StaffTypeController@edit')->name('edit');
+		Route::post('update/{id}', 'StaffTypeController@update')->name('update');
+		Route::post('destroy/{id}', 'StaffTypeController@destroy')->name('destroy');
+	});
+	Route::prefix('/staff')->name('staff.')->group(function(){
+		Route::get('/', 'StaffController@index')->name('index');
+		Route::get('/get', 'StaffController@get')->name('get');
+		Route::get('/getitem/{id}', 'StaffController@getitem')->name('getitem');
+		Route::get('/create', 'StaffController@create')->name('create');
+		Route::post('/store', 'StaffController@store')->name('store');
+		Route::get('show/{id}', 'StaffController@show')->name('show');
+		Route::get('/edit/{id}', 'StaffController@edit')->name('edit');
+		Route::post('update/{id}', 'StaffController@update')->name('update');
+		Route::post('destroy/{id}', 'StaffController@destroy')->name('destroy');
+	});
+	
 	Route::prefix('/web-infos')->name('web.')->group(function(){
 		Route::get('/', 'WebInfoController@index')->name('index');
 		Route::post('update', 'WebInfoController@update')->name('update');

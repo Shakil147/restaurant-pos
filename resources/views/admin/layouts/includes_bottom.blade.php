@@ -2,7 +2,7 @@
 <script src="{{ asset('template') }}/lib/jquery/jquery.min.js"></script>
 {{-- <script src="{{ asset('template') }}/lib/jquery-ui/ui/widgets/datepicker.js"></script> --}}
 
-{{-- <script src="{{ asset('template') }}/lib/perfect-scrollbar/perfect-scrollbar.min.js"></script> --}}
+<script src="{{ asset('template') }}/lib/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 {{-- <script src="{{ asset('template') }}/lib/peity/jquery.peity.min.js"></script> --}}
 {{-- <script src="{{ asset('template') }}/lib/rickshaw/vendor/d3.min.js"></script>
 <script src="{{ asset('template') }}/lib/rickshaw/vendor/d3.layout.min.js"></script>

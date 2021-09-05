@@ -27,12 +27,17 @@ class ItemController extends Controller
     public function get(Request $request)
     {
         $status = $request->status;
+        //return $request;
         $type_id = $request->type_id;
        return response()->json(Item::latest()->when($request->status, function ($query) use ($status) {
             $query->where('status',$status);
-        })->when($request->type_id, function ($query) use ($type_id) {
+        })->when($request->status, function ($query) use ($type_id) {
             $query->where('type_id',$type_id);
-        })->get());
+        })->get(),200);
+    }
+    public function getitem($id)
+    {
+       return response()->json(Item::findOrFail($id),200);
     }
     public function create ()
     {

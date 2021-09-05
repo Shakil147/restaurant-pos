@@ -38,7 +38,9 @@
                     alert('minimum quantaty is 1')
                     this.item.quantity=Number(1);
                 }
-               this.updateCartitem();
+                if (this.item.id &&  this.item.quantity) {
+                  this.updateCartitem();
+                } 
             },
         },
         mounted() {
@@ -60,6 +62,7 @@
                     return Number(this.quantity);
             },
             updateCartitem: function(){
+                
                 let data = new FormData;
                 data.append('id', this.item.id);
                 data.append('quantity', this.item.quantity);
