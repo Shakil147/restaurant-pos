@@ -196,7 +196,7 @@
 </div><!-- br-pagebody -->
 @endsection
 
-@push('title','staff Edit')
+@push('title','Staff Edit')
 @push('js')
 
 

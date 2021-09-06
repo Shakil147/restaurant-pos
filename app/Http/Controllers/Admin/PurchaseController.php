@@ -21,7 +21,7 @@ class PurchaseController extends Controller
     }
     public function index(Request $request)
     {
-        return view($this->path.'.index',['stocks'=>Stock::latest()->get()]);       
+        return view($this->path.'.index',['stocks'=>Stock::latest()->get(),'collapsedMenu'=>true]);       
     }
     public function get(Request $request)
     {
@@ -32,11 +32,11 @@ class PurchaseController extends Controller
     }
     public function create ()
     {
-        return view($this->path.'.add');
+        return view($this->path.'.add',['collapsedMenu'=>true]);
     }
     public function edit($id)
     {
-        return view($this->path.'.edit',['stock'=>Stock::findOrFail($id)]);
+        return view($this->path.'.edit',['stock'=>Stock::findOrFail($id),'collapsedMenu'=>true]);
     }
     public function store(Request $request)
     {

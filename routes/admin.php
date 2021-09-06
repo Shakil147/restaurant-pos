@@ -135,6 +135,7 @@ Route::get('/', 'HomeController@index');
 		Route::post('update/{id}', 'StaffTypeController@update')->name('update');
 		Route::post('destroy/{id}', 'StaffTypeController@destroy')->name('destroy');
 	});
+	
 	Route::prefix('/staff')->name('staff.')->group(function(){
 		Route::get('/', 'StaffController@index')->name('index');
 		Route::get('/get', 'StaffController@get')->name('get');
